@@ -48,20 +48,21 @@ kind: StagedNetworkPolicy
 metadata:
   name: namespace-segmentation.my-namespace-recommendation
   namespace: my-namespace
-  labels: "policyrecommendation.tigera.io/scope": "namespace"
-  ownerreferences:
-  - kind: "PolicyRecommendationScope"
+  labels:
+    policyrecommendation.tigera.io/scope: namespace
+  ownerReferences:
+  - kind: PolicyRecommendationScope
 spec:
-  stagedAction: "Learning"
+  stagedAction: Learning
   tier: namespace-segmentation
-  selector: "projectcalico.org/namespace == 'my-namespace'"
+  selector: projectcalico.org/namespace == 'my-namespace'
   types:
-    - Ingress
-    - Egress
+  - Ingress
+  - Egress
   ingress:
-    - action: Allow
+  - action: Allow
   egress:
-    - action: Allow
+  - action: Allow
 ```
 
 ## Definition
