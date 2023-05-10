@@ -11,12 +11,21 @@ PRODUCT?=calico
 IA_OPERATOR_REPO?=tigera/image-assurance
 IA_OPERATOR_VERSION?=v1.5.7-0.dev.0.20230410154742-6850d977e93b
 
+NODE_VER=20
+
+YARN=yarn
+YARN_ACTION_SUFFIX=
+ifeq ($(CONTAINERIZED),true)
+YARN=docker run -i --rm -v "$(shell pwd):/docs" -p 127.0.0.1:3000:3000 -w /docs node:$(NODE_VER) yarn
+YARN_ACTION_SUFFIX=-container
+endif
+
 build: init
-	yarn build
+	$(YARN) build
 
 .PHONY: start
 start: init
-	yarn start
+	$(YARN) start$(YARN_ACTION_SUFFIX)
 
 .PHONY: test
 test: init
@@ -24,21 +33,22 @@ test: init
 
 .PHONY: clear clean
 clear clean:
-	yarn clear
+	$(YARN) clear
 
 .PHONY: init
 init:
-	yarn install
+	$(YARN) install
 
 .PHONY: serve
 serve: build
-	yarn serve
+	$(YARN) serve$(YARN_ACTION_SUFFIX)
 
 .PHONY: full
 full: clean build
 
 .PHONY: all
 all: full
+	-$(MAKE) ci-cloud-image-list
 	-$(MAKE) test
 
 .PHONY: prod
@@ -98,3 +108,18 @@ build-ia-operator-reference:
 					-config /go/src/$(PACKAGE_NAME)/$(PRODUCT)/reference/installation/config.json \
 					-out-file /go/src/$(PACKAGE_NAME)/$(PRODUCT)/reference/installation/_ia-api.mdx && \
 					sed -i "s|<br>|<br/>|g" /go/src/$(PACKAGE_NAME)/$(PRODUCT)/reference/installation/_ia-api.mdx'
+
+update-cloud-image-list:
+	sed -i  '/^\$$INSTALLER_IMAGE/,/^)/{/^\$$/!{/^)/!d}}' $(PRODUCT)/get-started/connect/setup-private-registry.mdx
+	dl=$$(cat $(PRODUCT)/variables.js | grep clouddownloadurl | sed -e "s/^[^']*'\([^']*\)'.*$$/\1/" ) && \
+	curl -O $$dl/image-list &&\
+	sed -i -e "/^\$$INSTALLER_IMAGE/r image-list" $(PRODUCT)/get-started/connect/setup-private-registry.mdx
+	rm -f image-list
+
+ci-cloud-image-list:
+	PRODUCT=calico-cloud make update-cloud-image-list
+	for x in $$(ls calico-cloud_versioned_docs/); do \
+		PRODUCT=calico-cloud_versioned_docs/$$x make update-cloud-image-list; \
+	done
+	@if [ "$$(git diff --stat)" != "" ]; then \
+	echo "You might need to run 'make update-cloud-image-list' and commit the changes"; exit 1; fi

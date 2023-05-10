@@ -23,7 +23,7 @@ test("Crawl the docs and execute tests", async () => {
   const validityTestFiles = process.env.VALIDITY_TEST_FILES ? process.env.VALIDITY_TEST_FILES.split(',') : [];
   const isDeepCrawl = process.env.DEEP_CRAWL ? process.env.DEEP_CRAWL==='true' : false;
   const fileRegex = /https?:\/\/[-a-zA-Z0-9()@:%._+~#?&/=]+?\.(ya?ml|zip|ps1|tgz|sh|exe|bat|json)/gi;
-  const varRegex = /\{\{[ \t]*[\w-\[\]]+[ \t]*}}/g;
+  const varRegex = /\{\{[ \t]*[-\w\[\]]+[ \t]*}}/g;
   const varSkipList = [
     '{{end}}',
   ];
@@ -60,8 +60,11 @@ test("Crawl the docs and execute tests", async () => {
     `https://en.wikipedia.org/wiki/Autonomous_System_(Internet)%3E`,
     `https://installer.calicocloud.io/manifests/v3.15.1-8/manifests`,
     `https://installer.calicocloud.io/manifests/v3.16.1-0/manifests`,
+    `https://installer.calicocloud.io/manifests/v3.16.1-5/manifests`,
     `https://d881b853ae312e00302a84f1e346a77.gr7.us-west-2.eks.amazonaws.com`,
     `https://www.googletagmanager.com`,
+    'https://twitter.com/tigeraio',
+    'https://twitter.com/projectcalico',
     'https://csrc.nist.gov/publications/detail/fips/140/2/final',
     /^https?:\/\/csrc\.nist\.gov\/projects\/cryptographic-module-validation-program\/certificate\/\d+$/,
     /^https:\/\/installer\.calicocloud\.io:[0-9]{3,4}$/,
@@ -260,11 +263,40 @@ test("Crawl the docs and execute tests", async () => {
     }
   }
 
+  function spacePrefixLen(str) {
+    const match = str.match(/^[ \t]*/);
+    if (match != null && match.length > 0 && typeof match[0] === 'string') {
+      return match[0].replace('\t', '  ').length;
+    }
+    return 0;
+  }
+
+  function warnOnNoIndentation(code, origin) {
+    if (!process.env.YAML_INDENTATION_WARNING) return;
+    let startLen = 0;
+    let indentationExists = false;
+    const lines = code.split('\n');
+    if (lines.length < 2) return;
+    for (let idx = 0; idx < lines.length; idx++) {
+      const prefixLen = spacePrefixLen(lines[idx]);
+      if (idx === 0) {
+        startLen = prefixLen;
+      } else {
+        indentationExists = prefixLen > startLen;
+        if (indentationExists) break;
+      }
+    }
+    if (!indentationExists) {
+      console.warn(`[WARN] no indentation exists in yaml block on page ${origin}`);
+    }
+  }
+
   function testValidity(type, origin, code) {
     const yamlParseOptions = {strict: true, uniqueKeys: false};
     try {
       switch (type) {
         case 'yaml':
+          warnOnNoIndentation(code, origin);
           const errs = [];
           const docs = YAML.parseAllDocuments(code, yamlParseOptions);
           for (const doc of docs) {
