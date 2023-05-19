@@ -12,6 +12,7 @@ import Translate from '@docusaurus/Translate';
 import translations from '@theme/SearchTranslations';
 import { useProductId } from '../../utils/useProductId';
 import { getProductNameById } from '../../utils/getProductNameById';
+
 let DocSearchModal = null;
 function Hit({ hit, children }) {
   const text = hit.content || hit.hierarchy[hit.type];
@@ -36,6 +37,12 @@ function ResultsFooter({ state, onClose, productId }) {
   let version = '';
   if (productId) {
     version = localStorage.getItem(`docs-preferred-version-${productId}`) || 'current';
+  }
+  if(productId === 'calico-cloud'){
+    //TODO: figure this out
+    //current search is disabled for calico-cloud
+    // see docusaurus.config.js
+    version = '3.16'
   }
 
   const to = `/search?q=${encodeURIComponent(state.query)}&p=${productId || ''}&v=${version}`;
@@ -97,6 +104,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       ...props.searchParameters,
       facetFilters: productId ? filterFacetFiltersByProduct(facetFilters, productId) : facetFilters,
     });
+    console.log('searchParameters',searchParameters)
   }, [productId]);
   const [footer, setFooter] = useState();
   const { withBaseUrl } = useBaseUrlUtils();
@@ -195,6 +203,8 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     searchButtonRef,
   });
 
+
+
   return (
     <>
       <Head>
@@ -206,6 +216,10 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
           href={`https://${props.appId}-dsn.algolia.net`}
           crossOrigin='anonymous'
         />
+        {/* This loads libraries for clym privacy popups. */}
+        <script src="https://widget.clym-sdk.net/blocking.js"></script> 
+        <script>{`(function(d,s,i,w,o){ var js,cjs=d.getElementsByTagName(s)[0]; if(d.getElementById(i))return; js=d.createElement('script'); js.id=i; js.src='https://widget.clym-sdk.net/clym.js';js.onload=function(){Clym&&Clym.load(i,w,o)};cjs.parentNode.insertBefore(js, cjs) }(document,'script','clym-privacy','efccb797d8fa43acba85c4d5dutupsek',{}))`}</script>
+
       </Head>
 
       <DocSearchButton
