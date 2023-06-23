@@ -55,12 +55,19 @@ With {{prodname}} WAF, you gain visibility into internal east/west traffic at th
 
 :::caution
 
-Enabling WAF for certain system services may result in an undesired cluster state. Do not enable WAF for system service with the following prefixes:
+Enabling WAF for certain system services may result in an undesired cluster state.
+- Do not enable WAF for system service with the following prefixes:
 
-- `tigera-*`
-- `calico-*`
-- `kube-system`
-- `openshift-*`
+  - `tigera-*`
+  - `calico-*`
+  - `kube-system`
+  - `openshift-*`
+
+- Do not enable WAF for system services with the following combination of name and namespaces:
+  - name: `kubernetes`, namespace: `default`
+  - name: `openshift`, namespace: `default`
+  - name: `gatekeeper-webhook-service`, namespace: `gatekeeper-system`
+
 :::
 
 **Required**
@@ -85,7 +92,7 @@ kubectl patch felixconfiguration default --type='merge' -p '{"spec":{"policySync
 
 #### Step 1: Configure ApplicationLayer CRD
 
-Create or update the [ApplicationLayer](https://docs.tigera.io/reference/installation/api#operator.tigera.io/v1.ApplicationLayer) resource to include the webApplicationFirewall section of the file. Ensure value of the field is set to Enabled.
+Create or update the [ApplicationLayer](../reference/installation/api#operator.tigera.io/v1.ApplicationLayer) resource to include the webApplicationFirewall section of the file. Ensure value of the field is set to Enabled.
 
 Example:
 

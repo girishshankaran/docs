@@ -54,11 +54,16 @@ You simply enable WAF in Manager UI, and determine the services that you want to
 
 :::caution
 
-Enabling WAF for certain system services may result in an undesired cluster state. Do not enable WAF for system service with the following prefixes:
+Enabling WAF for certain system services may result in an undesired cluster state.
+- Do not enable WAF for system service with the following prefixes:
 
-- `tigera-*`
-- `calico-*`
-- `kube-system`
+  - `tigera-*`
+  - `calico-*`
+  - `kube-system`
+
+- Do not enable WAF for system services with the following combination of name and namespaces:
+  - name: `kubernetes`, namespace: `default`
+  - name: `gatekeeper-webhook-service`, namespace: `gatekeeper-system`
 
 :::
 
@@ -87,7 +92,7 @@ kubectl patch felixconfiguration default --type='merge' -p '{"spec":{"policySync
 2. Select the services you want WAF to inspect, and then click **Confirm Selections**.
     
    <img
-    src='/img/calico-enterprise/waf-select-services.png'
+    src='/img/calico-enterprise/waf-select-services-CE3.17-CC-3.16.png'
     alt='WAF services'
     width='600'
   />

@@ -5,7 +5,7 @@ const variables = {
   prodname: 'Calico',
   prodnamedash: 'calico',
   version: 'v3.25',
-  baseUrl: '/calico/latest',
+  baseUrl: '/calico/3.25',
   filesUrl: 'https://projectcalico.docs.tigera.io/v3.25',
   tutorialFilesURL: 'https://docs.tigera.io/files',
   calicoReleasesURL: 'https://github.com/projectcalico/calico/releases/download',
@@ -18,7 +18,7 @@ const variables = {
   manifestsUrl: 'https://raw.githubusercontent.com/projectcalico/calico/v3.25.1',
   releases,
   registry: '',
-  vppbranch: 'master',
+  vppbranch: 'v3.25.1',
   tigeraOperator: releases[0]['tigera-operator'],
   tigeraOperatorVersionShort: releases[0]['tigera-operator'].version.split('.').slice(0, 2).join('.'),
   imageNames: {

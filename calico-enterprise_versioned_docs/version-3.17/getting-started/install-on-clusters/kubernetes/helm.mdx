@@ -20,6 +20,10 @@ Helm charts are a way to package up an application for Kubernetes (similar to `a
 - `kubeconfig` is configured to work with your cluster (check by running `kubectl get nodes`)
 - [Credentials for the Tigera private registry and a license key](../calico-enterprise.mdx)
 
+**Optional**
+
+- If you bring your own Prometheus operator and omit the Tigera Prometheus operator from our Helm chart during installation, make sure that it is running before you install {{prodname}}.
+
 **Not Supported**
 
 - Multi-cluster management (mcm)
@@ -55,7 +59,7 @@ In this guide, you install the Tigera Calico operator and custom resource defini
 
 **Recommended - Networking**
 
-- The default networking is IP in IP encapsulation using BPG routing. For all networking options, see [Determine best networking option](../../../networking/determine-best-networking.mdx).
+- The default networking is IP in IP encapsulation using BGP routing. For all networking options, see [Determine best networking option](../../../networking/determine-best-networking.mdx).
 
 **Recommended - Security**
 

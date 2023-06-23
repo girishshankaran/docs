@@ -47,6 +47,10 @@ test("Crawl the docs and execute tests", async () => {
     // Skip this license attribution file, since we need to include the text of licenses unmodified,
     // and some have dead links
     'http://localhost:4242/calico/3.24/reference/legal/projectcalico',
+    'http://localhost:4242/calico/3.26/reference/legal/projectcalico',
+    'http://localhost:4242/calico/latest/reference/legal/projectcalico',
+    'http://localhost:4242/calico/next/reference/legal/projectcalico',
+    'http://localhost:4242/calico/3.25/reference/legal/node',
   ];
   const skipList = [
     /^https?:\/\/([\w-]+\.)?example\.com/,
@@ -55,6 +59,17 @@ test("Crawl the docs and execute tests", async () => {
     /^https:\/\/github\.com\/projectcalico\/calico\/tree\/master\/[\w/.-]+\.md$/i,
     /^https:\/\/www\.linkedin\.com\/company\/tigera\/?$/,
     'http://etcd.co',
+    'https://www.tigera.io/project-calico/community',
+    'https://openid.net/connect/',
+    'https://fedoraproject.org/wiki/EPEL',
+    'http://kubernetes.io/docs/user-guide/identifiers#names',
+    'http://kubernetes.io/docs/user-guide/volumes#emptydir',
+    'http://kubernetes.io/docs/user-guide/labels',
+    'https://nvd.nist.gov/vuln/detail/CVE-2017-5638',
+    'http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod',
+    'http://kubernetes.io/docs/user-guide/annotations',
+    'https://git.io/getLatestIstio',
+    'https://sns.us-east-2.amazonaws.com',
     'https://success.docker.com/article/docker-ee-best-practices',
     `https://installer.calicocloud.io/`,
     `https://installer.calicocloud.io/charts`,
@@ -71,6 +86,7 @@ test("Crawl the docs and execute tests", async () => {
     `https://installer.calicocloud.io/manifests/v3.15.1-8/manifests`,
     `https://installer.calicocloud.io/manifests/v3.16.1-0/manifests`,
     `https://installer.calicocloud.io/manifests/v3.16.1-5/manifests`,
+    `https://installer.calicocloud.io/manifests/v3.16.1-11/manifests`,
     `https://d881b853ae312e00302a84f1e346a77.gr7.us-west-2.eks.amazonaws.com`,
     `https://www.googletagmanager.com`,
     'https://twitter.com/tigeraio',
@@ -107,6 +123,7 @@ test("Crawl the docs and execute tests", async () => {
     'https://tools.ietf.org/html/rfc1123',
     'http://cr.yp.to/libtai/tai64.html#tai64n',
     'https://thenewstack.io/faster-troubleshooting-with-dynamic-packet-capture/', //==>Origin: http://localhost:4242/calico-cloud/visibility/packetcapture
+    'https://golang.org/pkg/crypto/tls/#ClientAuthType', //==>Origin: https://downloads.tigera.io/ee/v3.17.0/manifests/tigera-prometheus-operator.yaml. The dead link is automatically redirected to a working page, so no fix needed in the origin.
   ];
 
   const lc = linkChecker();

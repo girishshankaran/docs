@@ -337,9 +337,14 @@ const config = {
             path: 'next',
             banner: 'unreleased',
           },
-          3.25: {
-            label: '3.25 (latest)',
+          3.26: {
+            label: '3.26 (latest)',
             path: 'latest',
+            banner: 'none',
+          },
+          3.25: {
+            label: '3.25',
+            path: '3.25',
             banner: 'none',
           },
           3.24: {
@@ -361,12 +366,17 @@ const config = {
         path: 'calico-enterprise',
         routeBasePath: 'calico-enterprise',
         editCurrentVersion: true,
-        onlyIncludeVersions: ['current','3.16','3.15','3.14'],
+        onlyIncludeVersions: ['current','3.17','3.16','3.15','3.14'],
         lastVersion: '3.16',
         versions: {
           current: {
             label: 'Next',
             path: 'next',
+            banner: 'unreleased',
+          },
+          3.17: {
+            label: '3.17 (early preview)',
+            path: '3.17',
             banner: 'unreleased',
           },
           3.16: {
@@ -399,12 +409,16 @@ const config = {
         routeBasePath: 'calico-cloud',
         editCurrentVersion: true,
         //To see builds for unreleased versions, remove comments in the next line.
-        onlyIncludeVersions: [/*'current',*/'3.16'/*,'3.15'*/],
+        onlyIncludeVersions: [/*'current','3.17'*/'3.16'/*,'3.15'*/],
         versions: {
           current: {
             label: 'Next',
             path: 'next',
             banner: 'unreleased',
+          },
+          3.17: {
+            path: '3.17',
+            banner: 'none',
           },
           3.16: {
             path: '/',
