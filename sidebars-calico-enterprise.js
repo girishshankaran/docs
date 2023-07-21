@@ -219,7 +219,7 @@ module.exports = {
           link: {type: 'doc', id: 'network-policy/recommendations/index'},
           items: [
             'network-policy/recommendations/policy-recommendations',
-            'network-policy/recommendations/denied-traffic-flows',
+            'network-policy/recommendations/learn-about-policy-recommendations',
           ],  
         },
         'network-policy/policy-best-practices',
@@ -439,6 +439,7 @@ module.exports = {
       label: 'Threat defense',
       link: {type: 'doc', id: 'threat/index'},
       items: [
+        'threat/security-event-management',
         {
           type: 'category',
           label: 'Anomaly detection',
@@ -623,6 +624,7 @@ module.exports = {
       items: [
         'reference/api',
         'reference/installation/api',
+        'reference/installation/helm_customization',
         'reference/anomaly-detection',
         {
           type: 'category',
